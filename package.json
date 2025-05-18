@@ -1,0 +1,17 @@
+{
+  "name": "event-rewards-platform",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write \"**/*.{ts,js,json}\"",
+    "lint": "eslint \"**/*.{ts,js}\" --fix"
+  },
+  "devDependencies": {
+    "eslint": "^8.42.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "~5.3.3",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0"
+  }
+}

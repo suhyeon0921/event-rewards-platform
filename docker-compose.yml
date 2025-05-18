@@ -1,0 +1,62 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "${MONGODB_PORT}:${MONGODB_PORT}"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - event-reward-network
+
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    ports:
+      - "${GATEWAY_SERVER_PORT}:${GATEWAY_SERVER_PORT}"
+    environment:
+      - GATEWAY_PORT=${GATEWAY_SERVER_PORT}
+      - JWT_SECRET=${JWT_SECRET}
+      - AUTH_SERVICE_URL=http://auth:3001
+      - EVENT_SERVICE_URL=http://event:3002
+    depends_on:
+      - auth
+      - event
+    networks:
+      - event-reward-network
+
+  auth:
+    build: ./auth
+    container_name: auth
+    ports:
+      - "${AUTH_SERVER_PORT}:${AUTH_SERVER_PORT}"
+    environment:
+      - AUTH_PORT=${AUTH_SERVER_PORT}
+      - JWT_SECRET=${JWT_SECRET}
+      - MONGODB_URI=${MONGODB_URI}
+    depends_on:
+      - mongodb
+    networks:
+      - event-reward-network
+
+  event:
+    build: ./event
+    container_name: event
+    ports:
+      - "${EVENT_SERVER_PORT}:${EVENT_SERVER_PORT}"
+    environment:
+      - EVENT_PORT=${EVENT_SERVER_PORT}
+      - JWT_SECRET=${JWT_SECRET}
+      - MONGODB_URI=${MONGODB_URI}
+    depends_on:
+      - mongodb
+    networks:
+      - event-reward-network
+
+networks:
+  event-reward-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
