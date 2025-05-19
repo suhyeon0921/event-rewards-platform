@@ -25,8 +25,7 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const { user } = request;
 
-    const hasRole = this.matchRoles(requiredRoles, user.userRole);
-
+    const hasRole = this.matchRoles(requiredRoles, user.role);
     if (!hasRole) {
       throw new ForbiddenException(
         `${requiredRoles.join(', ')} 권한이 필요합니다.`,

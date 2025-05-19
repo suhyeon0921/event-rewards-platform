@@ -2,6 +2,9 @@ import { All, Controller, Req, Res, UseGuards } from '@nestjs/common';
 import { ProxyService } from './proxy.service';
 import { Request, Response } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../auth/constants/user-role.constants';
 
 @Controller('proxy')
 export class ProxyController {
@@ -21,9 +24,17 @@ export class ProxyController {
   }
 
   // Event 서비스로 라우팅
-  @All('events/*')
-  @UseGuards(JwtAuthGuard)
+  @All(['events', 'events/*'])
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.OPERATOR, UserRole.ADMIN)
   routeToEventService(@Req() req: Request, @Res() res: Response): void {
+    console.log('Gateway 요청 받음:', req.method, req.url);
+    console.log('요청 헤더:', req.headers);
+
+    if (req.body) {
+      console.log('요청 본문:', req.body);
+    }
+
     this.proxyService.routeToEventService(req, res);
   }
 }
