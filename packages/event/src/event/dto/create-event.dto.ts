@@ -1,10 +1,25 @@
 import {
   IsBoolean,
-  IsDate,
+  IsEnum,
   IsNotEmpty,
-  IsObject,
   IsString,
+  ValidateNested,
 } from 'class-validator';
+import {
+  AttendanceCondition,
+  ContestCondition,
+  EventConditionType,
+} from '../schemas/event.schema';
+import { Transform, Type } from 'class-transformer';
+
+export class EventConditionsDto {
+  @IsNotEmpty()
+  @IsEnum(EventConditionType)
+  type: EventConditionType;
+
+  @IsNotEmpty()
+  details: AttendanceCondition | ContestCondition;
+}
 
 export class CreateEventDto {
   @IsNotEmpty()
@@ -12,18 +27,25 @@ export class CreateEventDto {
   name: string;
 
   @IsNotEmpty()
-  @IsDate({ message: '시작 날짜는 날짜 형식이어야 합니다.' })
+  @Transform(({ value }) => new Date(value))
   startDate: Date;
 
   @IsNotEmpty()
-  @IsDate({ message: '종료 날짜는 날짜 형식이어야 합니다.' })
+  @Transform(({ value }) => new Date(value))
   endDate: Date;
 
   @IsNotEmpty()
   @IsBoolean({ message: '자동 보상 여부는 불리언 형식이어야 합니다.' })
+  @Transform(({ value }) => {
+    if (typeof value === 'string') {
+      return value === 'true';
+    }
+    return value;
+  })
   isAutoReward: boolean;
 
   @IsNotEmpty()
-  @IsObject({ message: '조건은 객체 형식이어야 합니다.' })
-  conditions: Record<string, any>;
+  @ValidateNested()
+  @Type(() => EventConditionsDto)
+  conditions: EventConditionsDto;
 }

@@ -12,7 +12,7 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { EventDocument } from './schemas/event.schema';
 import { UpdateEventDto } from './dto/update-event.dto';
 
-@Controller('events')
+@Controller('api/v1/events')
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 

@@ -3,7 +3,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
 import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
 
 const validationSchema = Joi.object({
   NODE_ENV: Joi.string().valid('dev', 'prod').default('dev'),
@@ -27,7 +26,6 @@ const validationSchema = Joi.object({
       }),
     }),
     AuthModule,
-    UserModule,
   ],
 })
 export class AppModule {}
