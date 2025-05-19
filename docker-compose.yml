@@ -11,7 +11,9 @@ services:
       - event-reward-network
 
   gateway:
-    build: ./packages/gateway
+    build:
+      context: .
+      dockerfile: ./packages/gateway/Dockerfile
     container_name: gateway
     ports:
       - "${GATEWAY_SERVER_PORT}:${GATEWAY_SERVER_PORT}"
@@ -19,8 +21,8 @@ services:
       - GATEWAY_PORT=${GATEWAY_SERVER_PORT}
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
-      - AUTH_SERVICE_URL=http://auth:3001
-      - EVENT_SERVICE_URL=http://event:3002
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+      - EVENT_SERVICE_URL=${EVENT_SERVICE_URL}
     depends_on:
       - auth
       - event
@@ -28,12 +30,13 @@ services:
       - event-reward-network
 
   auth:
-    build: ./packages/auth
+    build:
+      context: .
+      dockerfile: ./packages/auth/Dockerfile
     container_name: auth
     ports:
       - "${AUTH_SERVER_PORT}:${AUTH_SERVER_PORT}"
     environment:
-      - AUTH_PORT=${AUTH_SERVER_PORT}
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
       - MONGODB_URI=${MONGODB_URI}
@@ -43,12 +46,13 @@ services:
       - event-reward-network
 
   event:
-    build: ./packages/event
+    build:
+      context: .
+      dockerfile: ./packages/event/Dockerfile
     container_name: event
     ports:
       - "${EVENT_SERVER_PORT}:${EVENT_SERVER_PORT}"
     environment:
-      - EVENT_PORT=${EVENT_SERVER_PORT}
       - MONGODB_URI=${MONGODB_URI}
     depends_on:
       - mongodb

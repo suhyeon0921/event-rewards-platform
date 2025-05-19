@@ -6,8 +6,5 @@ export enum UserRole {
 }
 
 export enum RewardType {
-  ITEM = "ITEM",
-  COUPON = "COUPON",
   COIN = "COIN",
-  EQUIPMENT = "EQUIPMENT",
 }

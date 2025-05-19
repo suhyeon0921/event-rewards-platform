@@ -31,8 +31,6 @@ export class ProxyService {
 
     // 프록시 요청 로깅
     this.proxy.on('proxyReq', (proxyReq, req: any) => {
-      console.log(`프록시 요청 생성: ${req.method} ${(req as Request).url}`);
-
       // Express에서 이미 파싱된 본문이 있는 경우 직접 처리
       if (req.body && Object.keys(req.body).length > 0) {
         const bodyData = JSON.stringify(req.body);
@@ -41,13 +39,6 @@ export class ProxyService {
         proxyReq.setHeader('Content-Type', 'application/json');
         proxyReq.write(bodyData);
       }
-    });
-
-    // 프록시 응답 로깅
-    this.proxy.on('proxyRes', (proxyRes, req) => {
-      console.log(
-        `프록시 응답 수신: ${proxyRes.statusCode} ${req.method} ${(req as Request).url}`,
-      );
     });
   }
 
@@ -72,12 +63,7 @@ export class ProxyService {
     res: Response,
   ): void {
     const originalUrl = req.url;
-    req.url = req.url.replace(/^\/proxy/, '');
-
-    // 디버깅용 로그
-    console.log(
-      `프록시 요청: ${req.method} ${originalUrl} -> ${serviceUrl}${req.url}`,
-    );
+    req.url = req.url.replace(/\/proxy/, '');
 
     this.proxy.web(req, res, {
       target: serviceUrl,
