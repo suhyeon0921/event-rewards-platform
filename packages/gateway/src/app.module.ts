@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
+import { AuthModule } from './auth/auth.module';
 import { ProxyModule } from './proxy/proxy.module';
 
 const validationSchema = Joi.object({
@@ -17,6 +18,7 @@ const validationSchema = Joi.object({
         abortEarly: false,
       },
     }),
+    AuthModule,
     ProxyModule,
   ],
 })

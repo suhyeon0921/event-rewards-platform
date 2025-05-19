@@ -19,6 +19,21 @@ export class User {
     default: UserRole.USER,
   })
   role: UserRole;
+
+  @Prop({ type: Number, default: 0 })
+  level: number;
+
+  @Prop({ type: Number, default: 0 })
+  coins: number;
+
+  @Prop({ type: Number, default: 0 })
+  crystals: number;
+
+  @Prop({ type: [String] })
+  inventory: string[];
+
+  @Prop({ type: Date })
+  lastLoginDate: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

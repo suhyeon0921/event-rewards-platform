@@ -63,6 +63,6 @@ export class AuthService {
       );
     }
 
-    return this.generateJwtUtil.generateJwtToken(user.id);
+    return this.generateJwtUtil.generateJwtToken(user);
   }
 }
