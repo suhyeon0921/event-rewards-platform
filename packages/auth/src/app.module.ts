@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 const validationSchema = Joi.object({
   NODE_ENV: Joi.string().valid('dev', 'prod').default('dev'),
@@ -26,8 +26,8 @@ const validationSchema = Joi.object({
         uri: configService.getOrThrow<string>('MONGODB_URI'),
       }),
     }),
+    AuthModule,
+    UserModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
